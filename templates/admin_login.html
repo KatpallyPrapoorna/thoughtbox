@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Admin Panel</h2>
+
+{% if session.get('admin') %}
+<table>
+<tr><th>Name</th><th>Book</th><th>Category</th><th>Insight</th><th>Likes</th><th>Action</th></tr>
+{% for item in insights %}
+<tr>
+<td>{{item.name}}</td>
+<td>{{item.book_name}}</td>
+<td>{{item.category}}</td>
+<td>{{item.insight}}</td>
+<td>{{item.likes_count}}</td>
+<td>
+<form method="POST" action="/admin/delete/{{item.id}}">
+<button>Delete</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<form method="POST">
+<input name="username" placeholder="Username">
+<input name="password" placeholder="Password" type="password">
+<button>Login</button>
+</form>
+{% endif %}
+
+</div>
+{% endblock %}

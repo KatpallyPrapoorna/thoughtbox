@@ -1,0 +1,30 @@
+<div style="display:flex; justify-content:space-between;">
+    <h2>Admin Panel</h2>
+    <a href="/">⬅ Home</a>
+</div>
+
+<form method="GET">
+    <input name="search" placeholder="Search..." value="{{search}}">
+
+    <select name="category">
+        <option value="">All</option>
+        <option>Motivation</option>
+        <option>Mindset</option>
+        <option>Discipline</option>
+        <option>Habits</option>
+        <option>Productivity</option>
+    </select>
+
+    <button>Filter</button>
+</form>
+
+{% for item in insights %}
+<p>{{item.category}} - {{item.insight}}</p>
+
+<form method="POST" action="/admin/delete/{{item.id}}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button>Delete</button>
+</form>
+
+<hr>
+{% endfor %}

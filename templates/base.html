@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <b>📚 Book Insights</b>
+        <div>
+            <a href="/" style="margin-right:15px;">Home</a>
+            <a href="/admin/login">Admin</a>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+    <div class="footer">
+        <div class="footer-content">
+            <h3>Who I Am</h3>
+    
+            <p>
+                I bring together thoughts shaped by books — from stories,
+                ideas, and lessons that leave a mark.
+            </p>
+    
+            <p>
+                A place where reading turns into reflection,
+                and reflection becomes something worth sharing.
+            </p>
+    
+            <p class="footer-tagline">
+                “Built on ideas. Shared by readers.”
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById("modal-" + id).style.display = "flex";
+        }
+        function closeModal(id) {
+            document.getElementById("modal-" + id).style.display = "none";
+        }
+
+        // close when clicking outside
+        window.onclick = function (e) {
+            document.querySelectorAll(".modal").forEach(modal => {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

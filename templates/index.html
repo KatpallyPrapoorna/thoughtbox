@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Share what books taught you</h1>
+        <p>Ideas, lessons, and insights that deserve to be remembered.</p>
+    </div>
+
+    <!-- SEARCH + FILTER -->
+    <form method="GET" class="search-box">
+        <input name="search" placeholder="Search..." value="{{ search or '' }}">
+
+        <select name="category">
+            <option value="">All</option>
+            <option {% if request.args.get('category')=='Motivation' %}selected{% endif %}>Motivation</option>
+            <option {% if request.args.get('category')=='Mindset' %}selected{% endif %}>Mindset</option>
+            <option {% if request.args.get('category')=='Discipline' %}selected{% endif %}>Discipline</option>
+            <option {% if request.args.get('category')=='Habits' %}selected{% endif %}>Habits</option>
+            <option {% if request.args.get('category')=='Productivity' %}selected{% endif %}>Productivity</option>
+            <option {% if request.args.get('category')=='Leadership' %}selected{% endif %}>Leadership</option>
+            <option {% if request.args.get('category')=='Communication' %}selected{% endif %}>Communication</option>
+            <option {% if request.args.get('category')=='Psychology' %}selected{% endif %}>Psychology</option>
+            <option {% if request.args.get('category')=='Life Lessons' %}selected{% endif %}>Life Lessons</option>
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- EMPTY STATE -->
+    {% if insights|length == 0 %}
+    <p style="text-align:center; color:gray; margin-top:20px;">
+        No insights yet — be the first to share something meaningful ✨
+    </p>
+    {% endif %}
+
+    <!-- INSIGHTS LIST -->
+    {% for item in insights %}
+
+    <!-- CARD -->
+    <div class="card" onclick="openModal('{{ item.id }}')">
+        <span class="tag">{{ item.category }}</span>
+        <p>{{ item.insight[:120] }}{% if item.insight|length > 120 %}...{% endif %}</p>
+        <small>— {{ item.name }}</small>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-{{ item.id }}" class="modal">
+        <div class="modal-content">
+
+            <h3>{{ item.category }}</h3>
+
+            <p style="margin-top:10px;">{{ item.insight }}</p>
+
+            <p style="margin-top:10px; color:gray;">
+                <b>{{ item.name }}</b>
+                {% if item.book_name %}
+                · {{ item.book_name }}
+                {% endif %}
+            </p>
+
+            <!-- LIKE BUTTON -->
+            <form method="POST" action="/like/{{ item.id }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="{% if item.id in session.get('liked_posts', []) %}liked{% endif %}">
+                    ❤️ {{ item.likes_count }}
+                </button>
+            </form>
+
+            <br>
+            <button onclick="closeModal('{{ item.id }}')">Close</button>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+    <!-- SUBMIT FORM -->
+    <div class="form-box">
+        <h3>Share Insight</h3>
+
+        <form method="POST" action="/submit">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <input name="name" placeholder="Your name" required>
+
+            <select name="category" required>
+                <option>Motivation</option>
+                <option>Mindset</option>
+                <option>Discipline</option>
+                <option>Habits</option>
+                <option>Productivity</option>
+                <option>Leadership</option>
+                <option>Communication</option>
+                <option>Psychology</option>
+                <option>Life Lessons</option>
+            </select>
+
+            <input name="book_name" placeholder="Book name (optional)">
+
+            <textarea name="insight" placeholder="Write your insight..." required></textarea>
+
+            <button type="submit">Post Insight</button>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
