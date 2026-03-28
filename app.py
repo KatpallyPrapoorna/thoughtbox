@@ -90,7 +90,10 @@ def like(id):
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
-        if request.form.get("username") == ADMIN_USERNAME and request.form.get("password") == ADMIN_PASSWORD:
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["admin"] = True
             return redirect(url_for("admin_dashboard"))
 
@@ -103,23 +106,13 @@ def admin_dashboard():
     if not session.get("admin"):
         return redirect(url_for("admin_login"))
 
-    search = request.args.get("search", "")
-    category = request.args.get("category", "")
+    posts = Insight.query.order_by(Insight.created_at.desc()).all()
 
-    query = Insight.query
-
-    if search:
-        query = query.filter(Insight.insight.contains(search))
-
-    if category:
-        query = query.filter(Insight.category == category)
-
-    posts = query.all()
-
-    return render_template("admin_dashboard.html", insights=posts, search=search, category=category)
-
+    return render_template("admin_dashboard.html", insights=posts)
 
 # DELETE
+
+
 @app.route("/admin/delete/<int:id>", methods=["POST"])
 def delete(id):
     if not session.get("admin"):
