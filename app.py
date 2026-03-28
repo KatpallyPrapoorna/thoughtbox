@@ -88,6 +88,7 @@ def like(id):
 
 # ADMIN LOGIN
 @app.route("/admin/login", methods=["GET", "POST"])
+@csrf.exempt
 def admin_login():
     if request.method == "POST":
         username = request.form.get("username")

@@ -31,7 +31,7 @@
             <td>{{ item.likes_count }}</td>
             <td>
                 <form method="POST" action="/admin/delete/{{ item.id }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    {{ csrf_token() }}
                     <button type="submit">Delete</button>
                 </form>
             </td>
