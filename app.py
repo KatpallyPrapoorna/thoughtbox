@@ -127,6 +127,12 @@ def delete(id):
     return redirect(url_for("admin_dashboard"))
 
 
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop("admin", None)
+    return redirect(url_for("admin_login"))
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # use Render's assigned port
     # debug False for production
