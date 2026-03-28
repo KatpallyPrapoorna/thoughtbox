@@ -10,8 +10,10 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "DATABASE_URL").replace("postgres://", "postgresql://")
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    os.getenv("DATABASE_URL", "sqlite:///data.db")
+    .replace("postgres://", "postgresql://")
+)
 
 db.init_app(app)
 csrf = CSRFProtect(app)
