@@ -4,3 +4,4 @@ Flask-SQLAlchemy
 python-dotenv
 bleach
 gunicorn
+psycopg2-binary
